@@ -255,6 +255,7 @@ export function createSpace(canvas, { quality, reduced }) {
   state.look.copy(worlds[0].group.position);
 
   function resize(w, h) {
+    if (!w || !h) return;
     state.w = w; state.h = h;
     renderer.setSize(w, h, false);
     composer.setSize(w, h);

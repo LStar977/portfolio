@@ -137,9 +137,11 @@ const fromHash = flight.info.find(s => s.el.id === hash);
 if (fromHash && fromHash.i > 0) window.scrollTo(0, flight.scrollYFor(fromHash.id));
 
 // ---------- loop ----------
-let last = performance.now(), slow = 0, degraded = 0;
+let last = performance.now(), slow = 0, degraded = 0, seenW = window.innerWidth, seenH = window.innerHeight;
 function frame(now) {
   requestAnimationFrame(frame);
+  // catch size changes that arrive without a resize event (a page opened while hidden, for example)
+  if (window.innerWidth !== seenW || window.innerHeight !== seenH) { seenW = window.innerWidth; seenH = window.innerHeight; clearTimeout(rz); rz = setTimeout(layout, 60); }
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
   if (lenis) lenis.raf(now);
   if (paused) return;
