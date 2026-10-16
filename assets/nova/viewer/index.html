@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nova v5 Motion Studio</title>
+<style>
+  :root { --bg:#0c0b0a; --panel:#141210; --line:#2a2520; --text:#ece6dc; --muted:#9a9186; --gold:#d6a856; --gold2:#f3d8a0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 14px/1.4 "Avenir Next", "Helvetica Neue", system-ui, sans-serif; }
+  body { display: grid; grid-template-columns: minmax(0, 1fr) 360px; }
+  main { position: relative; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 50% 40%, #1a1714, #0a0908 70%); }
+  #stage { max-width: 100%; max-height: 100vh; aspect-ratio: 16 / 9; width: 100%; height: auto; display: block; box-shadow: 0 20px 60px rgba(0,0,0,.5); cursor: grab; }
+  #stage.vertical { aspect-ratio: 9 / 16; width: auto; height: 100vh; }
+  #status { position: absolute; left: 16px; bottom: 12px; font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+  #rec-dot { position: absolute; right: 18px; top: 16px; display: none; align-items: center; gap: 8px; color: #ff6b6b; font-size: 12px; letter-spacing: .12em; }
+  #rec-dot::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: #ff4d4d; box-shadow: 0 0 12px #ff4d4d; }
+  aside { background: var(--panel); border-left: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; }
+  header { padding: 20px 20px 12px; border-bottom: 1px solid var(--line); }
+  h1 { margin: 0; font: italic 400 30px/1 Didot, "Bodoni 72", serif; letter-spacing: .02em; }
+  h1 span { font: 500 11px "Avenir Next", sans-serif; letter-spacing: .3em; color: var(--gold); vertical-align: middle; margin-left: 8px; font-style: normal; }
+  .tabs { display: flex; gap: 2px; padding: 10px 12px 0; border-bottom: 1px solid var(--line); }
+  .tabs button { flex: 1; background: none; border: 0; color: var(--muted); padding: 10px 4px; font: 500 12px inherit; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tabs button.on { color: var(--gold2); border-color: var(--gold); }
+  .pane { display: none; overflow: auto; padding: 16px 18px 24px; flex: 1; }
+  .pane.on { display: block; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .chip { background: #1c1916; border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: 10px 8px; font: inherit; cursor: pointer; text-transform: capitalize; transition: .15s; }
+  .chip:hover { border-color: #5a4a30; background: #221e19; }
+  .chip.on { border-color: var(--gold); color: var(--gold2); background: #2a2217; }
+  h3 { margin: 18px 0 8px; font: 500 11px inherit; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+  h3:first-child { margin-top: 0; }
+  label.slider { display: grid; grid-template-columns: 1fr 44px; gap: 2px 8px; margin: 8px 0 12px; font-size: 12.5px; color: #cfc6b8; }
+  label.slider input { grid-column: 1 / -1; width: 100%; accent-color: var(--gold); }
+  label.slider output { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  label.slider.held span::after { content: " ●"; color: var(--gold); font-size: 10px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 10px 0; }
+  .row select { background: #1c1916; color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font: inherit; }
+  .toggle { display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer; color: #cfc6b8; }
+  .toggle input { accent-color: var(--gold); width: 16px; height: 16px; }
+  .btn { width: 100%; margin-top: 8px; padding: 12px; border-radius: 8px; border: 1px solid var(--gold); background: linear-gradient(#3a2d18, #2a2112); color: var(--gold2); font: 600 13px inherit; letter-spacing: .08em; cursor: pointer; }
+  .btn.ghost { background: none; border-color: var(--line); color: var(--text); font-weight: 500; }
+  .note { color: var(--muted); font-size: 12px; line-height: 1.5; }
+  @media (max-width: 900px) { body { grid-template-columns: 1fr; grid-template-rows: 55vh 1fr; } aside { border-left: 0; border-top: 1px solid var(--line); } #stage.vertical { height: 55vh; } }
+</style>
+</head>
+<body>
+<main>
+  <canvas id="stage" width="1920" height="1080" aria-label="Nova"></canvas>
+  <div id="status">Loading Nova…</div>
+  <div id="rec-dot">REC</div>
+</main>
+<aside>
+  <header><h1>Nova <span>V5 MOTION</span></h1></header>
+  <div class="tabs" role="tablist">
+    <button data-tab="act" class="on">Act</button><button data-tab="controls">Controls</button><button data-tab="scene">Scene</button><button data-tab="record">Record</button>
+  </div>
+  <section class="pane on" id="act">
+    <h3>Expressions</h3><div class="grid" id="exprs"></div>
+    <h3>Motions</h3><div class="grid" id="motions"></div>
+    <h3>Live</h3>
+    <label class="toggle"><input type="checkbox" id="life" checked> Idle life (breathing, blinks, eye darts, sway)</label>
+    <label class="toggle"><input type="checkbox" id="follow"> Look at cursor</label>
+    <label class="toggle"><input type="checkbox" id="mic"> Microphone lip-sync</label>
+  </section>
+  <section class="pane" id="controls">
+    <p class="note">Dragging a slider holds that value (●). Double-click a slider to release it back to the performance.</p>
+    <div id="sliders"></div>
+    <button class="btn ghost" id="release">Release all sliders</button>
+  </section>
+  <section class="pane" id="scene">
+    <div class="row"><span>Background</span><select id="bg"><option value="obsidian">Obsidian</option><option value="gold">Gold night</option><option value="paper">Paper</option><option value="green">Green screen</option><option value="transparent">Transparent</option></select></div>
+    <div class="row"><span>Framing</span><select id="frame"><option value="full">Waist-up</option><option value="bust">Bust</option><option value="face">Face</option></select></div>
+    <div class="row"><span>Format</span><select id="format"><option value="16:9">16:9 · 1920×1080</option><option value="9:16">9:16 · 1080×1920</option></select></div>
+    <label class="slider"><span>Wind</span><output id="windv">0.30</output><input type="range" id="wind" min="0" max="1" step=".01" value=".3"></label>
+    <label class="toggle"><input type="checkbox" id="cleanup" checked> Dark-background edge cleanup</label>
+    <p class="note">Drag the stage to pan, scroll to zoom.</p>
+  </section>
+  <section class="pane" id="record">
+    <p class="note">Records the stage exactly as shown (including background) to a WebM video. Use Green screen to key Nova into other edits.</p>
+    <div class="row"><span>Length</span><select id="reclen"><option value="5">5 s</option><option value="10" selected>10 s</option><option value="20">20 s</option><option value="0">Until stopped</option></select></div>
+    <button class="btn" id="recbtn">● Start recording</button>
+    <button class="btn ghost" id="snap">Save still (PNG)</button>
+  </section>
+</aside>
+
+<script src="../vendor/live2dcubismcore.js"></script>
+<script type="module">
+import { createRig, CONTROLS } from '../rig/nova-rig.js';
+import { Performer, EXPRESSIONS, MOTIONS } from '../rig/motions.js';
+
+const $ = id => document.getElementById(id);
+const stage = $('stage'), sctx = stage.getContext('2d');
+const status = t => $('status').textContent = t;
+const FRAMES = {
+  '16:9': { full: { cx: 830, cy: 1250, s: .44, ox: 960, oy: 560 }, bust: { cx: 845, cy: 930, s: .7, ox: 960, oy: 540 }, face: { cx: 848, cy: 630, s: 1.22, ox: 960, oy: 540 } },
+  '9:16': { full: { cx: 830, cy: 1300, s: .62, ox: 540, oy: 1000 }, bust: { cx: 845, cy: 980, s: .95, ox: 540, oy: 960 }, face: { cx: 848, cy: 640, s: 1.5, ox: 540, oy: 900 } },
+};
+
+try {
+  const rc = document.createElement('canvas');
+  const rig = await createRig(rc, { modelUrl: '../model/Nova.model3.json', width: 1920, height: 1080 });
+  const perf = new Performer({ seed: Date.now() % 100000 });
+  let format = '16:9', cam = { ...FRAMES[format].full, rot: 0 };
+  const held = {};
+
+  // ---- UI: expressions & motions ----
+  for (const name of Object.keys(EXPRESSIONS)) {
+    const b = document.createElement('button'); b.className = 'chip' + (name === 'neutral' ? ' on' : ''); b.textContent = name;
+    b.onclick = () => { perf.setExpression(name); document.querySelectorAll('#exprs .chip').forEach(c => c.classList.toggle('on', c === b)); };
+    $('exprs').append(b);
+  }
+  const MOTION_LABELS = { lookAround: 'look around' };
+  for (const name of Object.keys(MOTIONS)) { const b = document.createElement('button'); b.className = 'chip'; b.textContent = MOTION_LABELS[name] || name; b.onclick = () => perf.play(name); $('motions').append(b); }
+  // ---- sliders ----
+  let group = '';
+  for (const [id, min, max, def, label, grp] of CONTROLS) {
+    if (id === 'ParamWind') continue;
+    if (grp !== group) { group = grp; const h = document.createElement('h3'); h.textContent = grp; $('sliders').append(h); }
+    const l = document.createElement('label'); l.className = 'slider'; l.innerHTML = `<span>${label}</span><output>${(+def).toFixed(2)}</output><input type="range" min="${min}" max="${max}" step="${(max - min) / 200}" value="${def}">`;
+    const input = l.querySelector('input'), out = l.querySelector('output');
+    input.oninput = () => { held[id] = +input.value; l.classList.add('held'); out.textContent = (+input.value).toFixed(2); };
+    input.ondblclick = () => { delete held[id]; l.classList.remove('held'); };
+    l.dataset.id = id; $('sliders').append(l);
+  }
+  $('release').onclick = () => { for (const k in held) delete held[k]; document.querySelectorAll('label.slider.held').forEach(l => l.classList.remove('held')); };
+  document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
+    document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === b.dataset.tab));
+  });
+  $('life').onchange = e => perf.life = e.target.checked;
+  $('wind').oninput = e => { $('windv').textContent = (+e.target.value).toFixed(2); };
+  $('cleanup').onchange = e => rig.setCleanup(e.target.checked);
+  $('frame').onchange = e => cam = { ...FRAMES[format][e.target.value], rot: 0 };
+  $('format').onchange = e => {
+    format = e.target.value; const [w, h] = format === '16:9' ? [1920, 1080] : [1080, 1920];
+    stage.width = w; stage.height = h; stage.classList.toggle('vertical', format === '9:16'); rig.resize(w, h); cam = { ...FRAMES[format][$('frame').value], rot: 0 };
+  };
+
+  // ---- pan / zoom ----
+  let drag = null;
+  stage.onpointerdown = e => { drag = { x: e.clientX, y: e.clientY, cx: cam.cx, cy: cam.cy }; stage.setPointerCapture(e.pointerId); stage.style.cursor = 'grabbing'; };
+  stage.onpointerup = () => { drag = null; stage.style.cursor = 'grab'; };
+  let pointer = null;
+  stage.onpointermove = e => {
+    const r = stage.getBoundingClientRect(), k = stage.width / r.width; pointer = [(e.clientX - r.left) * k, (e.clientY - r.top) * k];
+    if (drag) { cam.cx = drag.cx - (e.clientX - drag.x) * k / cam.s; cam.cy = drag.cy - (e.clientY - drag.y) * k / cam.s; }
+  };
+  stage.onpointerleave = () => pointer = null;
+  stage.onwheel = e => { e.preventDefault(); cam.s = Math.min(2.2, Math.max(.25, cam.s * Math.exp(-e.deltaY * .0012))); };
+
+  // ---- microphone lip-sync ----
+  let analyser = null, level = 0; const buf = new Float32Array(1024);
+  $('mic').onchange = async e => {
+    if (!e.target.checked) { analyser = null; return; }
+    try { const s = await navigator.mediaDevices.getUserMedia({ audio: true }); const ac = new AudioContext(); analyser = ac.createAnalyser(); analyser.fftSize = 1024; ac.createMediaStreamSource(s).connect(analyser); }
+    catch { e.target.checked = false; status('Microphone unavailable'); }
+  };
+
+  // ---- backgrounds ----
+  const R = (() => { let s = 11; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
+  const bokeh = Array.from({ length: 26 }, () => ({ x: R(), y: R(), r: 30 + R() * 120, a: .04 + R() * .1, v: .2 + R() * .6 }));
+  function background(t) {
+    const w = stage.width, h = stage.height, kind = $('bg').value;
+    sctx.clearRect(0, 0, w, h);
+    if (kind === 'transparent') return;
+    if (kind === 'green') { sctx.fillStyle = '#00b140'; sctx.fillRect(0, 0, w, h); return; }
+    if (kind === 'paper') { const g = sctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#f1ece3'); g.addColorStop(1, '#e2dacd'); sctx.fillStyle = g; sctx.fillRect(0, 0, w, h); return; }
+    sctx.fillStyle = '#090807'; sctx.fillRect(0, 0, w, h);
+    const [hx, hy] = rig.project(900, 900); const g = sctx.createRadialGradient(hx, hy, 0, hx, hy, Math.max(w, h) * .6);
+    g.addColorStop(0, 'rgba(122,84,40,.42)'); g.addColorStop(.45, 'rgba(60,40,22,.28)'); g.addColorStop(1, 'rgba(8,7,6,0)'); sctx.fillStyle = g; sctx.fillRect(0, 0, w, h);
+    if (kind === 'gold') { sctx.globalCompositeOperation = 'lighter'; for (const b of bokeh) { const x = b.x * w + Math.sin(t * .1 * b.v + b.r) * 40, y = ((b.y - t * .01 * b.v) % 1 + 1) % 1 * h; const gg = sctx.createRadialGradient(x, y, 0, x, y, b.r); gg.addColorStop(0, `rgba(255,205,135,${b.a})`); gg.addColorStop(.85, `rgba(255,200,125,${b.a * 1.3})`); gg.addColorStop(1, 'rgba(255,190,110,0)'); sctx.fillStyle = gg; sctx.beginPath(); sctx.arc(x, y, b.r, 0, 7); sctx.fill(); } sctx.globalCompositeOperation = 'source-over'; }
+  }
+
+  // ---- loop ----
+  let last = performance.now(), look = [0, 0], fps = 60;
+  function frame(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now; fps += (1 / Math.max(dt, 1e-3) - fps) * .05;
+    const p = perf.update(dt);
+    if ($('follow').checked && pointer) {
+      const [fx, fy] = rig.project(848, 600, false), tx = Math.max(-1, Math.min(1, (pointer[0] - fx) / (stage.width * .35))), ty = Math.max(-1, Math.min(1, -(pointer[1] - fy) / (stage.height * .35)));
+      look[0] += (tx - look[0]) * Math.min(1, dt * 8); look[1] += (ty - look[1]) * Math.min(1, dt * 8);
+      p.ParamEyeBallX = look[0]; p.ParamEyeBallY = look[1]; p.ParamAngleX += 22 * look[0]; p.ParamAngleY += 16 * look[1]; p.ParamBodyAngleX += 4 * look[0];
+    } else { look[0] *= .9; look[1] *= .9; }
+    if (analyser) { analyser.getFloatTimeDomainData(buf); let s = 0; for (const v of buf) s += v * v; const rms = Math.sqrt(s / buf.length); level += (Math.min(1, Math.max(0, (rms - .01) * 9)) - level) * .45; p.ParamMouthOpenY = Math.max(p.ParamMouthOpenY, level * .75); }
+    p.ParamWind = +$('wind').value;
+    Object.assign(p, held);
+    rig.set(p); rig.step(dt); rig.render(cam);
+    background(now / 1000); sctx.drawImage(rc, 0, 0);
+    for (const l of document.querySelectorAll('#sliders label.slider')) if (!(l.dataset.id in held) && $('controls').classList.contains('on')) { const v = rig.params[l.dataset.id]; l.querySelector('input').value = v; l.querySelector('output').textContent = (+v).toFixed(2); }
+    if (!recording) status(`${rig.stats().vertices.toLocaleString()} vertices · ${Math.round(fps)} fps`);
+    requestAnimationFrame(frame);
+  }
+
+  // ---- recording ----
+  let recording = null;
+  $('recbtn').onclick = () => {
+    if (recording) return recording.stop();
+    const mime = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find(m => MediaRecorder.isTypeSupported(m));
+    const rec = new MediaRecorder(stage.captureStream(60), { mimeType: mime, videoBitsPerSecond: 24e6 }), chunks = [];
+    rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+    rec.onstop = () => {
+      recording = null; $('rec-dot').style.display = 'none'; $('recbtn').textContent = '● Start recording';
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' })); a.download = `nova-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.webm`; a.click();
+      status('Saved recording');
+    };
+    rec.start(250); recording = rec; $('rec-dot').style.display = 'flex'; $('recbtn').textContent = '■ Stop recording'; status('Recording…');
+    const len = +$('reclen').value; if (len) setTimeout(() => recording === rec && rec.stop(), len * 1000);
+  };
+  $('snap').onclick = () => { const a = document.createElement('a'); a.href = stage.toDataURL('image/png'); a.download = 'nova-still.png'; a.click(); };
+
+  window.nova = { rig, perf };
+  requestAnimationFrame(frame);
+} catch (e) { status('Could not start: ' + e.message); console.error(e); }
+</script>
+</body>
+</html>

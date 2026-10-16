@@ -1,0 +1,157 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>&#26376;&#26126;&#12363;&#12426;&#12434;&#32399;&#12387;&#12390; Opening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Shippori+Mincho:wght@600;800&display=swap">
+<style>
+  :root{
+    --night:#07050a; --panel:#120c12; --line:rgba(236,206,150,.22); --bone:#f3ece6; --muted:#a8989e;
+    --crimson:#d3163a; --gold:#e6c98f;
+    --latin:'Cinzel','Times New Roman',serif; --jp:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
+    color-scheme:dark;
+  }
+  [hidden]{display:none!important}
+  html,body{height:100%}
+  body{margin:0;background:radial-gradient(ellipse at 50% 0%,#1a0b12 0%,var(--night) 60%);color:var(--bone);font-family:var(--latin)}
+  .shell{box-sizing:border-box;min-height:100%;padding-inline:16px;padding-block:18px 22px;display:flex;flex-direction:column;align-items:center}
+  .frame{width:min(100%, calc((100vh - 130px) * 16 / 9), 1920px);display:flex;flex-direction:column;gap:14px}
+  .stage{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;background:#000;overflow:hidden;cursor:pointer;box-shadow:0 0 0 1px var(--line),0 30px 80px rgba(0,0,0,.6)}
+  .stage canvas{display:block;width:100%;height:100%}
+  .stage:fullscreen{width:100vw;height:100vh;aspect-ratio:auto;box-shadow:none}
+  .stage:fullscreen canvas{object-fit:contain}
+  .overlay{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at center,rgba(7,5,10,.35),rgba(7,5,10,.85));cursor:default;transition:opacity .6s ease}
+  .overlay.gone{opacity:0;pointer-events:none}
+  .ov{display:flex;flex-direction:column;align-items:center;gap:clamp(10px,2vw,24px);text-align:center;padding:16px}
+  .kicker{margin:0;font:400 clamp(10px,1.1vw,13px)/1 var(--latin);letter-spacing:.42em;text-transform:uppercase;color:var(--gold)}
+  .title{margin:0;font:800 clamp(34px,6.4vw,92px)/1.1 var(--jp);letter-spacing:.06em;text-shadow:0 0 30px rgba(255,40,80,.35)}
+  .title .moon{color:var(--crimson)}
+  .romaji{margin:0;font:400 clamp(10px,1.1vw,14px)/1 var(--latin);letter-spacing:.5em;color:var(--muted)}
+  .play{display:inline-flex;align-items:center;gap:14px;border:1px solid var(--line);background:rgba(7,5,10,.5);color:var(--bone);padding:14px 30px;font:600 clamp(11px,1.1vw,13px)/1 var(--latin);letter-spacing:.34em;text-transform:uppercase;cursor:pointer;transition:border-color .25s,background .25s}
+  .play::before{content:"";width:0;height:0;border-left:9px solid var(--crimson);border-top:6px solid transparent;border-bottom:6px solid transparent}
+  .play:hover:not(:disabled){border-color:var(--gold);background:rgba(211,22,58,.08)}
+  .play:disabled{opacity:.55;cursor:progress}
+  .bar{height:2px;width:min(240px,50vw);background:rgba(255,255,255,.1);overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--crimson),var(--gold));transition:width .2s}
+  .controls{display:flex;align-items:center;gap:16px}
+  .ctl{flex:none;width:42px;height:42px;border:1px solid var(--line);background:transparent;color:var(--bone);display:grid;place-items:center;cursor:pointer;transition:border-color .2s}
+  .ctl:hover{border-color:var(--gold)}
+  .ctl svg{width:16px;height:16px}
+  .time{flex:none;font:400 12px ui-monospace,'SF Mono',Menlo,monospace;color:var(--muted);font-variant-numeric:tabular-nums;min-width:96px;letter-spacing:.06em}
+  .time b{color:var(--bone);font-weight:500}
+  .track{position:relative;flex:1;height:24px;cursor:pointer;touch-action:none}
+  .rail{position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(243,236,230,.2)}
+  .tick{position:absolute;top:50%;width:1px;height:10px;margin-top:-5px;background:rgba(230,201,143,.55)}
+  .fillbar{position:absolute;left:0;top:50%;height:1px;width:0;background:var(--crimson);pointer-events:none}
+  .head{position:absolute;top:50%;left:0;width:10px;height:10px;margin:-5px 0 0 -5px;transform:rotate(45deg);background:var(--crimson);box-shadow:0 0 12px rgba(211,22,58,.7);pointer-events:none}
+  .secs{display:flex;flex-wrap:wrap;gap:4px 22px}
+  .sec{border:0;background:none;padding:6px 0;font:400 11px/1 var(--latin);letter-spacing:.24em;text-transform:uppercase;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:9px}
+  .sec::before{content:"";width:5px;height:5px;transform:rotate(45deg);background:rgba(243,236,230,.25)}
+  .sec:hover,.sec.on{color:var(--bone)}
+  .sec.on::before{background:var(--crimson);box-shadow:0 0 8px rgba(211,22,58,.8)}
+  button:focus-visible,.track:focus-visible{outline:1px solid var(--gold);outline-offset:4px}
+  @media (max-width:560px){.time{min-width:0;font-size:11px}.controls{gap:10px}.secs{gap:2px 14px}}
+  body.render .shell{display:none}
+</style>
+
+<main class="shell">
+  <div class="frame">
+    <div class="stage" id="stage" aria-label="Anime opening for &#26376;&#26126;&#12363;&#12426;&#12434;&#32399;&#12387;&#12390;">
+      <canvas id="view" width="1920" height="1080"></canvas>
+      <div class="overlay" id="overlay">
+        <div class="ov">
+          <p class="kicker">Opening</p>
+          <h1 class="title"><span class="moon">&#26376;</span>&#26126;&#12363;&#12426;&#12434;&#32399;&#12387;&#12390;</h1>
+          <p class="romaji">Tsukiakari wo matotte</p>
+          <div class="bar" id="loadbar"><i id="loadfill"></i></div>
+          <button class="play" id="bigPlay" type="button" disabled><span id="bigPlayLabel">Preparing</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="ctl" id="playBtn" type="button" aria-label="Play">
+        <svg id="icoPlay" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.8v14.4a.8.8 0 0 0 1.2.7l11.6-7.2a.8.8 0 0 0 0-1.4L8.2 4.1A.8.8 0 0 0 7 4.8z"/></svg>
+        <svg id="icoPause" viewBox="0 0 24 24" aria-hidden="true" hidden><rect x="6" y="4.5" width="3.6" height="15" fill="currentColor"/><rect x="14.4" y="4.5" width="3.6" height="15" fill="currentColor"/></svg>
+      </button>
+      <div class="time"><b id="tCur">0:00</b> / <span id="tDur">1:30</span></div>
+      <div class="track" id="track" tabindex="0" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="90" aria-valuenow="0">
+        <div class="rail"></div><div id="ticks"></div><div class="fillbar" id="fillbar"></div><div class="head" id="head"></div>
+      </div>
+      <button class="ctl" id="fsBtn" type="button" aria-label="Fullscreen">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+    </div>
+    <div class="secs" id="secs"></div>
+  </div>
+</main>
+
+<script src="engine.js"></script>
+<script src="engine2.js"></script>
+<script src="lyrics.js"></script>
+<script src="edit.js"></script>
+<script>
+'use strict';
+const SECTIONS = [['Intro', 0], ['Title', 10.67], ['Verse', 14.15], ['Pre-chorus', 26.01], ['Chorus', 38.26], ['Quiet', 54.43], ['Final chorus', 64.37], ['Finale', 83.6]];
+const POSTER_T = 64.9;
+const params = new URLSearchParams(location.search), RENDER = params.has('render');
+if (RENDER) document.body.classList.add('render');
+REDUCED_MOTION = !RENDER && window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const view = $('view'), vctx = view.getContext('2d');
+
+const Player = { mode: null, ctx: null, buf: null, src: null, el: null, startedAt: 0, offset: 0, playing: false, duration: 90,
+  async load(url) {
+    try { if (location.protocol === 'file:') throw new Error('file'); const res = await fetch(url); if (!res.ok) throw new Error('http'); const ab = await res.arrayBuffer(); const AC = window.AudioContext || window.webkitAudioContext; this.ctx = new AC();
+      this.buf = await new Promise((ok, bad) => { const p = this.ctx.decodeAudioData(ab, ok, bad); if (p && p.then) p.then(ok, bad); }); this.mode = 'wa'; }
+    catch (e) { this.mode = 'el'; this.el = new Audio(url); this.el.preload = 'auto'; await new Promise(ok => { this.el.addEventListener('canplaythrough', ok, { once: true }); this.el.addEventListener('error', ok, { once: true }); setTimeout(ok, 6000); }); } },
+  time() { if (this.mode === 'wa') { if (!this.playing) return this.offset; const lat = Math.min(.3, (this.ctx.outputLatency || 0) + (this.ctx.baseLatency || 0)); return Math.max(0, this.ctx.currentTime - this.startedAt - lat); } return this.el ? this.el.currentTime : this.offset; },
+  play() { if (this.playing) return; if (this.mode === 'wa') { this.ctx.resume(); const s = this.ctx.createBufferSource(); s.buffer = this.buf; s.connect(this.ctx.destination); this.startedAt = this.ctx.currentTime - this.offset; s.start(0, Math.min(this.offset, this.buf.duration - .01)); this.src = s; } else if (this.el) { this.el.currentTime = this.offset; this.el.play().catch(() => {}); } this.playing = true; },
+  pause() { if (!this.playing) return; this.offset = this.time(); if (this.mode === 'wa') { try { this.src.stop(); } catch (e) {} this.src = null; } else if (this.el) this.el.pause(); this.playing = false; },
+  seek(t) { t = clamp(t, 0, this.duration); const was = this.playing; if (was) this.pause(); this.offset = t; if (this.el) this.el.currentTime = t; if (was) this.play(); } };
+
+const UI = { started: false, dragging: false, wasPlaying: false };
+let READY = false, lastT = -1, lastSec = -1;
+const fmt = s => { s = Math.max(0, s); return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0'); };
+function setPlayingUI() { const p = Player.playing; $('icoPlay').hidden = p; $('icoPause').hidden = !p; $('playBtn').setAttribute('aria-label', p ? 'Pause' : 'Play'); }
+function togglePlay() { if (!READY) return; if (!UI.started) { UI.started = true; Player.seek(0); } if (Player.playing) Player.pause(); else { if (Player.time() >= Player.duration - .05) Player.seek(0); Player.play(); } $('overlay').classList.add('gone'); setPlayingUI(); }
+function seekTo(t) { if (!READY) return; if (!UI.started) { UI.started = true; $('overlay').classList.add('gone'); } Player.seek(t); }
+function toggleFS() { const el = $('stage'); try { if (document.fullscreenElement) document.exitFullscreen(); else if (el.requestFullscreen) el.requestFullscreen().catch(() => {}); else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen(); } catch (e) {} }
+function buildUI() {
+  SECTIONS.forEach(s => { const d = document.createElement('div'); d.className = 'tick'; d.style.left = (s[1] / 90 * 100) + '%'; $('ticks').appendChild(d);
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'sec'; b.textContent = s[0]; b.addEventListener('click', () => { seekTo(s[1] + .02); if (!Player.playing) togglePlay(); }); $('secs').appendChild(b); });
+  const tr = $('track'), at = e => { const r = tr.getBoundingClientRect(); return clamp((e.clientX - r.left) / r.width) * Player.duration; };
+  tr.addEventListener('pointerdown', e => { if (!READY) return; UI.dragging = true; UI.wasPlaying = Player.playing; if (Player.playing) Player.pause(); tr.setPointerCapture(e.pointerId); seekTo(at(e)); });
+  tr.addEventListener('pointermove', e => { if (UI.dragging) seekTo(at(e)); });
+  const end = e => { if (!UI.dragging) return; UI.dragging = false; seekTo(at(e)); if (UI.wasPlaying) Player.play(); setPlayingUI(); }; tr.addEventListener('pointerup', end); tr.addEventListener('pointercancel', end);
+  tr.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { seekTo(Player.time() + 5); e.preventDefault(); } if (e.key === 'ArrowLeft') { seekTo(Player.time() - 5); e.preventDefault(); } });
+  $('playBtn').addEventListener('click', togglePlay); $('bigPlay').addEventListener('click', e => { e.stopPropagation(); togglePlay(); });
+  $('stage').addEventListener('click', e => { if (e.target.closest('.overlay')) return; togglePlay(); }); $('fsBtn').addEventListener('click', toggleFS);
+  window.addEventListener('keydown', e => { if (e.target.closest && e.target.closest('button') && e.key === ' ') return; if (e.key === ' ') { e.preventDefault(); togglePlay(); } else if (e.key === 'ArrowRight' && e.target === document.body) seekTo(Player.time() + 5); else if (e.key === 'ArrowLeft' && e.target === document.body) seekTo(Player.time() - 5); else if (e.key === 'f' || e.key === 'F') toggleFS(); });
+}
+function updateUI(t) { const u = clamp(t / 90); $('fillbar').style.width = (u * 100) + '%'; $('head').style.left = (u * 100) + '%'; $('tCur').textContent = fmt(t); $('track').setAttribute('aria-valuenow', Math.round(t));
+  let si = 0; SECTIONS.forEach((s, i) => { if (t >= s[1]) si = i; }); if (si !== lastSec) { lastSec = si; [...$('secs').children].forEach((b, i) => b.classList.toggle('on', i === si)); } }
+function present(t) { renderFrame(t); if (view.width !== FRAME.width) { vctx.drawImage(FRAME, 0, 0, view.width, view.height); } else vctx.drawImage(FRAME, 0, 0); }
+function loop() { requestAnimationFrame(loop); if (!READY) return; const t = UI.started ? Math.min(Player.time(), 89.99) : POSTER_T; if (t !== lastT || Player.playing) { present(t); lastT = t; }
+  if (UI.started) updateUI(t); if (Player.playing && Player.time() >= Player.duration - .02) { Player.pause(); Player.offset = Player.duration; setPlayingUI(); $('bigPlayLabel').textContent = 'Play again'; $('overlay').classList.remove('gone'); } }
+function sizeView() { const r = $('stage').getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); const w = Math.min(1920, Math.round(r.width * dpr)); if (w >= 160 && Math.abs(view.width - w) > 8) { view.width = w; view.height = Math.round(w * 9 / 16); lastT = -1; } }
+
+// Offline render: every frame -> JPEG -> local render server -> ffmpeg (see render/README.md)
+window.OP = { renderFrame, async render(from = 0, to = 2700, server = 'http://127.0.0.1:8767', q = .95) {
+  window.OP.progress = from; window.OP.done = false;
+  for (let n = from; n < to; n++) { renderFrame(n / FPS); const blob = await new Promise(r => FRAME.toBlob(r, 'image/jpeg', q)); await fetch(server + '/frame?n=' + n, { method: 'POST', body: blob }); window.OP.progress = n + 1; }
+  window.OP.done = true; } };
+
+(async function boot() {
+  initBuffers(); makeSprites();
+  const audioP = RENDER ? Promise.resolve() : Player.load('assets/music.mp3');
+  await loadAll('assets/', p => { $('loadfill').style.width = (p * 80) + '%'; });
+  const allJP = SONG.title + LYRICS.map(L => L.text).join('') + '\u9396\u65ad\u5371\u71c3\u7e8f\u79c1\u7d05\u6708';
+  try { await Promise.race([Promise.all([document.fonts.load("800 80px 'Shippori Mincho'", allJP), document.fonts.load("600 20px Cinzel", 'TSUKIAKARI destiny'), document.fonts.load("400 20px Cinzel", LYRICS.map(L => L.en).join(' '))]), new Promise(r => setTimeout(r, 15000))]); } catch (e) {}
+  prepareEdit(); $('loadfill').style.width = '92%';
+  await audioP; $('loadfill').style.width = '100%';
+  READY = true; window.OP.ready = true;
+  if (RENDER) return;
+  buildUI(); sizeView(); window.addEventListener('resize', sizeView); $('bigPlay').disabled = false; $('bigPlayLabel').textContent = 'Play opening'; $('loadbar').hidden = true; setPlayingUI(); requestAnimationFrame(loop);
+})().catch(err => { console.error(err); $('bigPlayLabel').textContent = 'Could not load. Reload the page'; });
+</script>
+
+</body></html>

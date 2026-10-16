@@ -1,0 +1,79 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "Nova.moc3.json",
+    "Textures": [
+      "textures/texture_4096.webp"
+    ],
+    "DisplayInfo": "Nova.cdi3.json",
+    "Physics": "Nova.physics3.json",
+    "Expressions": [
+      {
+        "Name": "Neutral",
+        "File": "expressions/Neutral.exp3.json"
+      },
+      {
+        "Name": "EyesClosed",
+        "File": "expressions/EyesClosed.exp3.json"
+      },
+      {
+        "Name": "Speaking",
+        "File": "expressions/Speaking.exp3.json"
+      }
+    ],
+    "Motions": {
+      "Blink": [
+        {
+          "File": "motions/Blink.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "SmallTilt": [
+        {
+          "File": "motions/SmallTilt.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "SpeechPreview": [
+        {
+          "File": "motions/SpeechPreview.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "HandEmphasis": [
+        {
+          "File": "motions/HandEmphasis.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ],
+      "Breathing": [
+        {
+          "File": "motions/Breathing.motion3.json",
+          "FadeInTime": 0,
+          "FadeOutTime": 0
+        }
+      ]
+    }
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    }
+  ]
+}

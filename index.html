@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lance Morrison Warpgate</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Lance Morrison's portfolio: a flight through apps, anime openings, a Live2D navigator and the rest of what he has built.">
+<meta name="theme-color" content="#04050a">
+<meta property="og:title" content="Lance Morrison Warpgate">
+<meta property="og:description" content="Fly through apps, anime openings and a Live2D navigator named Nova.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lstar977.github.io/portfolio/">
+<meta property="og:image" content="https://lstar977.github.io/portfolio/assets/media/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://lstar977.github.io/portfolio/">
+<link rel="icon" href="assets/media/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&text=%E6%9C%88%E6%98%8E%E3%81%8B%E3%82%8A%E3%82%92%E7%BA%8F%E3%81%A3%E3%81%A6%E6%9A%81%E6%96%AC%E3%82%8C&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800&text=%E5%A4%A9%E9%87%8E%E3%81%93%E3%81%AA%E6%9C%88%E5%B3%B6%E3%83%AC%E3%82%A4%E6%A1%9C%E5%BA%AD%E3%81%BF%E5%A4%8F%E7%9B%AE%E3%83%8A%E3%82%AE&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&innerWidth>=900&&innerHeight>=560&&window.WebGL2RenderingContext)d.classList.add('flight');}catch(e){}})();</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-out" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 256 256"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 256 256"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.08a40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.58,24,24,0,0,0,0-31.72,8,8,0,0,1,12-10.58ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 256 256"><path d="M53.92,34.62A8,8,0,1,0,42.08,45.38L73.55,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V175.09l42.08,46.29a8,8,0,1,0,11.84-10.76ZM32,96H72v64H32ZM144,207.64,88,164.09V95.89l56,61.6Zm42-63.77a24,24,0,0,0,0-31.72,8,8,0,1,1,12-10.57,40,40,0,0,1,0,52.88,8,8,0,0,1-12-10.59Zm-80.16-76a8,8,0,0,1,1.4-11.23l39.85-31A8,8,0,0,1,160,32v74.83a8,8,0,0,1-16,0V48.36l-26.94,21A8,8,0,0,1,105.84,67.910ZM248,128a79.9,79.9,0,0,1-20.37,53.34,8,8,0,0,1-11.92-10.67,64,64,0,0,0,0-85.33,8,8,0,1,1,11.92-10.67A79.83,79.83,0,0,1,248,128Z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 256 256"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.810,43.810,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 256 256"><path d="M224,128a96,96,0,0,1-94.71,96H128A95.38,95.38,0,0,1,62.1,197.8a8,8,0,0,1,11-11.63A80,80,0,1,0,71.43,71.39a3.07,3.07,0,0,1-.26.25L44.59,96H72a8,8,0,0,1,0,16H24a8,8,0,0,1-8-8V56a8,8,0,0,1,16,0V85.8L60.25,60A96,96,0,0,1,224,128Z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 256 256"><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.650-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.830,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.670-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"/></symbol>
+</svg>
+
+<canvas id="space" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+
+<!-- Cockpit HUD -->
+<header class="hud" aria-label="Site">
+  <a class="hud__name" href="#gate" data-fly="gate">Lance Morrison</a>
+  <div class="hud__mid">
+    <p class="hud__where" aria-live="off"><span class="hud__sector" id="hud-sector">Gate</span><span class="hud__stop" id="hud-stop">Departure</span></p>
+    <p class="gauges" aria-hidden="true"><span class="gauge"><span class="gauge__k">Speed</span> <span class="gauge__v" id="g-speed">0.00c</span></span><span class="gauge"><span class="gauge__k">From gate</span> <span class="gauge__v" id="g-dist">0.0 ly</span></span></p>
+  </div>
+  <div class="hud__tools">
+    <button class="tool" type="button" id="open-index" aria-haspopup="dialog"><svg class="ico"><use href="#i-list"/></svg><span>All projects</span></button>
+    <button class="tool" type="button" id="sound" aria-pressed="false"><svg class="ico ico--off"><use href="#i-mute"/></svg><svg class="ico ico--on"><use href="#i-sound"/></svg><span id="sound-label">Sound off</span></button>
+  </div>
+</header>
+
+<nav class="route" aria-label="Route">
+  <ol class="route__list" id="route"></ol>
+</nav>
+
+<div class="progress" aria-hidden="true"><i id="g-bar"></i></div>
+
+<!-- Nova, the navigator -->
+<div class="nova" id="nova" data-state="comm">
+  <div class="nova__frame" id="nova-frame">
+    <span class="nova__bg" aria-hidden="true"></span>
+    <img class="nova__still" src="assets/media/nova-still.webp" alt="" width="947" height="1400">
+    <canvas class="nova__canvas" id="nova-canvas" aria-label="Nova, a Live2D character"></canvas>
+    <span class="nova__tag">Nova</span>
+  </div>
+  <div class="nova__say" id="nova-say">
+    <p class="nova__line" id="nova-line" aria-live="off">Hi. I'm Nova.</p>
+  </div>
+</div>
+
+<main class="journey" id="journey">
+
+  <!-- Gate -->
+  <section class="stop stop--gate" id="gate" data-stop="gate" data-sector="Gate" data-name="Departure" data-accent="#cfe3ff" data-frame="center"
+    data-line="Hi, I'm Nova. Lance built me, and most of what's out there. I'll be your navigator." data-mood="hello">
+    <div class="panel panel--gate">
+      <h1 class="gate__name"><span>Lance</span><span>Morrison</span></h1>
+      <p class="gate__sub">I build apps, films and characters. This is a flight through what I've made so far.</p>
+      <div class="actions actions--center">
+        <button class="btn btn--primary" type="button" data-fly="represent"><span>Start the jump</span></button>
+        <button class="btn btn--ghost" type="button" data-open-index><span>All projects</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="leg" id="leg-1" data-leg data-sector="Sector 1" data-name="Products" data-accent="#cfe3ff"
+    data-line="Gate's open. Hold on, the first jump is the loud one." data-mood="smile">
+    <div class="panel panel--leg">
+      <p class="leg__k">Sector 1</p>
+      <p class="leg__title">Products</p>
+    </div>
+  </section>
+
+  <!-- Represent -->
+  <section class="stop" id="represent" data-stop="represent" data-sector="Sector 1" data-name="Represent" data-accent="#eaba58" data-frame="right"
+    data-line="This is the one closest to his heart. Real questions, real people, one vote each." data-mood="nod">
+    <div class="panel panel--split">
+      <div class="dossier">
+        <img class="dossier__mark" src="assets/media/represent-mark.webp" alt="" width="256" height="256">
+        <h2 class="dossier__title">Represent</h2>
+        <p class="dossier__lede">A civic voting app where verified people answer real local questions between elections.</p>
+        <p class="dossier__body">Everyone is ID-verified, so it's one person, one ballot. Cities, organizations and neighbours ask, and the results are public. It's live on the App Store in Canada.</p>
+        <dl class="specs">
+          <div><dt>Platform</dt><dd>iOS, Android, web</dd></div>
+          <div><dt>Stack</dt><dd>Expo, Express, Postgres</dd></div>
+          <div><dt>Status</dt><dd>Live in Canada</dd></div>
+        </dl>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="works/record-in-light/index.html" data-launch-title="The Record in Light"><svg class="ico"><use href="#i-play"/></svg><span>Open The Record in Light</span></button>
+          <a class="btn btn--link" href="https://apps.apple.com/ca/app/represent-vote/id6756912022" target="_blank" rel="noopener"><span>App Store</span><svg class="ico"><use href="#i-out"/></svg></a>
+          <a class="btn btn--link" href="https://representvote.com" target="_blank" rel="noopener"><span>Website</span><svg class="ico"><use href="#i-out"/></svg></a>
+        </div>
+        <ul class="moons" aria-label="More from Represent">
+          <li class="moon">
+          <button type="button" class="moon__btn" data-launch="works/represent-reimagined/index.html" data-launch-title="Represent Reimagined">
+            <span class="moon__name">Reimagined prototype</span>
+            <span class="moon__note">A companion-first redesign you can tap through, with a Rive character and voice.</span>
+          </button>
+        </li>
+          <li class="moon">
+          <button type="button" class="moon__btn" data-launch="assets/media/sentinel-loop.mp4" data-launch-type="video" data-launch-title="Sentinel">
+            <span class="moon__name">Sentinel</span>
+            <span class="moon__note">Grades a bill against 155 governance principles and explains the verdict.</span>
+          </button>
+        </li>
+      </ul>
+      </div>
+      <figure class="viewport viewport--inset">
+        <video muted loop playsinline preload="none" poster="assets/media/represent-poster.webp" data-src="assets/media/represent-loop.mp4" width="960" height="540"></video>
+        <figcaption>Brand reveal, 18 seconds</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- TITAN -->
+  <section class="stop" id="titan" data-stop="titan" data-sector="Sector 1" data-name="TITAN" data-accent="#a98bff" data-frame="left"
+    data-line="Titan is a moon of Saturn. This one counts your reps." data-mood="smug">
+    <div class="panel panel--split panel--mirror">
+      <div class="dossier">
+        <h2 class="dossier__title" aria-label="TITAN">TIT<span class="lambda">Λ</span>N</h2>
+        <p class="dossier__lede">A strength-training log on the App Store. One SwiftUI codebase ships two brands.</p>
+        <p class="dossier__body">Log a set in one tap, catch every personal record, see the week's volume on a muscle map, and climb the ranks from Bronze to Titan. VALKYRIE is the same app in a second skin.</p>
+        <dl class="specs">
+          <div><dt>Platform</dt><dd>iOS, SwiftUI, SwiftData</dd></div>
+          <div><dt>Released</dt><dd>August 2026</dd></div>
+          <div><dt>Promo films</dt><dd>Remotion</dd></div>
+        </dl>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="works/titan-preview/index.html" data-launch-title="TITAN 1.1 Preview"><svg class="ico"><use href="#i-play"/></svg><span>Try it in the browser</span></button>
+          <a class="btn btn--link" href="https://apps.apple.com/us/app/titan-gym-workout-tracker/id6794148691" target="_blank" rel="noopener"><span>App Store</span><svg class="ico"><use href="#i-out"/></svg></a>
+          <a class="btn btn--link" href="https://github.com/LStar977/titan" target="_blank" rel="noopener"><span>GitHub</span><svg class="ico"><use href="#i-out"/></svg></a>
+        </div>
+      </div>
+      <div class="phones">
+        <figure class="phone">
+          <video muted loop playsinline preload="none" poster="assets/media/titan-poster.webp" data-src="assets/media/titan-loop.mp4" width="432" height="768"></video>
+          <figcaption>TITAN</figcaption>
+        </figure>
+        <figure class="phone phone--b">
+          <video muted loop playsinline preload="none" poster="assets/media/valkyrie-poster.webp" data-src="assets/media/valkyrie-loop.mp4" width="432" height="768"></video>
+          <figcaption>VALKYRIE</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Distill -->
+  <section class="stop" id="distill" data-stop="distill" data-sector="Sector 1" data-name="Distill" data-accent="#ff6a45" data-frame="high-right"
+    data-line="Three thousand reviews go in. Six clear decisions come out." data-mood="think">
+    <div class="panel panel--wide">
+      <div class="dossier dossier--row">
+        <div class="dossier__head">
+          <h2 class="dossier__title">Distill</h2>
+          <p class="dossier__lede">An AI research agent that turns a pile of customer reviews into ranked product decisions.</p>
+        </div>
+        <div class="dossier__more">
+          <p class="dossier__body">It reads every review, clusters the complaints, ranks the opportunities and writes a brief where every claim cites the reviews behind it. The pipeline streams live while it works.</p>
+          <div class="actions">
+            <a class="btn btn--primary" href="https://distill-tau-five.vercel.app" target="_blank" rel="noopener"><span>Open the live demo</span><svg class="ico"><use href="#i-out"/></svg></a>
+            <a class="btn btn--link" href="https://github.com/LStar977/distill" target="_blank" rel="noopener"><span>GitHub</span><svg class="ico"><use href="#i-out"/></svg></a>
+          </div>
+          <dl class="figures">
+            <div><dt>Reviews in</dt><dd>3,214</dd></div>
+            <div><dt>Decisions out</dt><dd>6</dd></div>
+            <div><dt>Precision on the golden set</dt><dd>81%</dd></div>
+            <div><dt>Recall</dt><dd>82%</dd></div>
+          </dl>
+        </div>
+      </div>
+      <figure class="viewport viewport--wide">
+        <video muted loop playsinline preload="none" poster="assets/media/distill-poster.webp" data-src="assets/media/distill-loop.mp4" width="1120" height="630"></video>
+        <figcaption>Demo run on 3,214 fitness-app reviews</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Contrail -->
+  <section class="stop" id="contrail" data-stop="contrail" data-sector="Sector 1" data-name="Contrail" data-accent="#5cc8ff" data-frame="right"
+    data-line="Every one of those lights is a real plane, flying right now." data-mood="look">
+    <div class="panel panel--split">
+      <div class="dossier">
+        <h2 class="dossier__title">Contrail</h2>
+        <p class="dossier__lede">A free, live flight tracker for the whole planet, built on open ADS-B data.</p>
+        <p class="dossier__body">Follow any flight with its route and altitude profile, search by airline or tail number, check an airport's runways and weather, or switch to Overhead and see what's flying above you right now.</p>
+        <dl class="specs">
+          <div><dt>Stack</dt><dd>Next.js, MapLibre GL, deck.gl</dd></div>
+          <div><dt>Data</dt><dd>Open ADS-B feeds</dd></div>
+          <div><dt>Views</dt><dd>Map, overhead, airports</dd></div>
+        </dl>
+        <div class="actions">
+          <a class="btn btn--primary" href="https://github.com/LStar977/contrail" target="_blank" rel="noopener"><svg class="ico"><use href="#i-github"/></svg><span>Read the code</span></a>
+        </div>
+      </div>
+      <div class="deck" aria-label="Contrail screens">
+        <img src="assets/media/contrail-map.webp" alt="Contrail's live map with a flight from Chicago to Dublin selected" width="1280" height="800" loading="lazy">
+        <img src="assets/media/contrail-overhead.webp" alt="Overhead mode showing planes above Brooklyn on a radar" width="1280" height="800" loading="lazy">
+        <img src="assets/media/contrail-airport.webp" alt="JFK airport page with arrivals, weather and runways" width="1280" height="1191" loading="lazy">
+        <img src="assets/media/contrail-search.webp" alt="Search results for Lufthansa" width="1280" height="800" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <section class="leg" id="leg-2" data-leg data-sector="Sector 2" data-name="Films and characters" data-accent="#ff7ab8"
+    data-line="Next sector is the creative one. Turn your sound on if you can." data-mood="smile">
+    <div class="panel panel--leg">
+      <p class="leg__k">Sector 2</p>
+      <p class="leg__title">Films and characters</p>
+    </div>
+  </section>
+
+  <!-- Nova -->
+  <section class="stop stop--nova" id="nova-stop" data-stop="nova" data-sector="Sector 2" data-name="Nova" data-accent="#f0b45c" data-frame="right"
+    data-line="This one's me. Go ahead, press the buttons. I don't mind." data-mood="happy">
+    <div class="panel panel--nova">
+      <div class="dossier">
+        <h2 class="dossier__title">Nova</h2>
+        <p class="dossier__lede">The navigator you've been talking to. A Live2D character with a motion rig I wrote for the browser.</p>
+        <p class="dossier__body">Her model started as 23 flat layers. I re-meshed it into an 86,000-point grid and added head turns, eye tracking, blush, and physics for her hair. She runs live in WebGL right here.</p>
+        <div class="controls" id="nova-controls" aria-label="Make Nova react">
+          <p class="controls__k" id="nova-expr-label">Mood</p>
+          <div class="chips" role="group" aria-labelledby="nova-expr-label">
+            <button type="button" class="chip" data-expr="smile">Smile</button>
+            <button type="button" class="chip" data-expr="curious">Curious</button>
+            <button type="button" class="chip" data-expr="thinking">Thinking</button>
+            <button type="button" class="chip" data-expr="shy">Shy</button>
+            <button type="button" class="chip" data-expr="smug">Smug</button>
+            <button type="button" class="chip" data-expr="surprised">Surprised</button>
+          </div>
+          <p class="controls__k" id="nova-motion-label">Move</p>
+          <div class="chips" role="group" aria-labelledby="nova-motion-label">
+            <button type="button" class="chip" data-motion="hello">Wave</button>
+            <button type="button" class="chip" data-motion="wink">Wink</button>
+            <button type="button" class="chip" data-motion="laugh">Laugh</button>
+            <button type="button" class="chip" data-motion="nod">Nod</button>
+            <button type="button" class="chip" data-motion="lookAround">Look around</button>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="assets/nova/viewer/index.html" data-launch-title="Nova Motion Studio"><svg class="ico"><use href="#i-play"/></svg><span>Open Nova Studio</span></button>
+          <button class="btn btn--ghost" type="button" data-launch="assets/media/nova-reel.mp4" data-launch-type="video" data-launch-title="Nova reel"><span>Watch the reel</span></button>
+        </div>
+      </div>
+      <div class="nova-stage" id="nova-stage" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- STAR DASH -->
+  <section class="stop" id="star-dash" data-stop="stardash" data-sector="Sector 2" data-name="STAR DASH" data-accent="#ff5fa8" data-frame="low"
+    data-line="Four idols, one song, ninety seconds. Kokona will want you to press play." data-mood="wink">
+    <div class="panel panel--cinema">
+      <figure class="viewport viewport--cinema">
+        <video muted loop playsinline preload="none" poster="assets/media/star-dash-poster.webp" data-src="assets/media/star-dash-loop.mp4" width="960" height="540"></video>
+        <button class="viewport__play" type="button" data-launch="works/star-dash/index.html" data-launch-title="STAR☆DASH! Opening" aria-label="Play the STAR☆DASH! opening"><svg class="ico"><use href="#i-play"/></svg></button>
+      </figure>
+      <div class="dossier">
+        <h2 class="dossier__title dossier__title--logo"><img src="assets/media/stardash-logo.webp" alt="STAR☆DASH!" width="1200" height="461"></h2>
+        <p class="dossier__lede">A 90-second idol anime opening for a group that doesn't exist yet.</p>
+        <p class="dossier__body">Four members, 41 scenes and 11 motion clips, cut to the song by a canvas engine I wrote. Lyrics run in romaji and English, timed to the vocal.</p>
+        <ul class="cast" aria-label="Members">
+          <li style="--c:#ff8a2a"><span lang="ja">天野ここな</span> Kokona</li>
+          <li style="--c:#6f8cff"><span lang="ja">月島レイ</span> Rei</li>
+          <li style="--c:#ff6fae"><span lang="ja">桜庭みみ</span> Mimi</li>
+          <li style="--c:#2fd49a"><span lang="ja">夏目ナギ</span> Nagi</li>
+        </ul>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="works/star-dash/index.html" data-launch-title="STAR☆DASH! Opening"><svg class="ico"><use href="#i-play"/></svg><span>Play the opening</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tsukiakari -->
+  <section class="stop" id="tsukiakari" data-stop="tsuki" data-sector="Sector 2" data-name="Tsukiakari" data-accent="#e8394f" data-frame="right"
+    data-line="My favourite. Watch how each word lights up as it's sung." data-mood="tilt">
+    <div class="panel panel--moon">
+      <h2 class="tategaki" lang="ja" aria-label="月明かりを纏って, Tsukiakari wo matotte">月明かりを纏って</h2>
+      <div class="dossier">
+        <p class="dossier__title dossier__title--small">Tsukiakari wo matotte</p>
+        <p class="dossier__lede">A gothic anime opening. In English, the title means "clad in moonlight".</p>
+        <p class="dossier__body">Each character lights up the moment it's sung. I split out the vocal, aligned the lyrics to it one character at a time, then corrected the timing by hand. Every frame renders from the song's clock, so you can scrub anywhere.</p>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="works/tsukiakari/index.html" data-launch-title="月明かりを纏って Opening"><svg class="ico"><use href="#i-play"/></svg><span>Play the opening</span></button>
+        </div>
+      </div>
+      <figure class="viewport viewport--inset viewport--low">
+        <video muted loop playsinline preload="none" poster="assets/media/tsukiakari-poster.webp" data-src="assets/media/tsukiakari-loop.mp4" width="960" height="540"></video>
+        <figcaption>Final chorus, 1:04</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Count Me In -->
+  <section class="stop" id="count-me-in" data-stop="countmein" data-sector="Sector 2" data-name="Count Me In" data-accent="#62e6b8" data-frame="left"
+    data-line="Everything in this video is painted by code. Even the clouds." data-mood="laugh">
+    <div class="panel panel--split panel--mirror">
+      <div class="dossier">
+        <h2 class="dossier__title dossier__title--paint" aria-label="Count Me In"><span style="--c:#ff6b8a">Count</span> <span style="--c:#ffd25a">Me</span> <span style="--c:#62e6b8">In</span></h2>
+        <p class="dossier__lede">A two-minute music video painted entirely by code.</p>
+        <p class="dossier__body">A bristle-brush and watercolour engine paints every frame live in p5.js. The little Voicelings dance to kick and bass envelopes pulled from the song, so the whole film moves on the beat.</p>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="works/count-me-in/index.html" data-launch-title="Count Me In"><svg class="ico"><use href="#i-play"/></svg><span>Play the video</span></button>
+        </div>
+      </div>
+      <figure class="viewport viewport--inset">
+        <video muted loop playsinline preload="none" poster="assets/media/count-me-in-poster.webp" data-src="assets/media/count-me-in-loop.mp4" width="960" height="540"></video>
+        <figcaption>The million-voice chorus, 0:46</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Akatsuki -->
+  <section class="stop" id="akatsuki" data-stop="akatsuki" data-sector="Sector 2" data-name="In production" data-accent="#ff9d5c" data-frame="top"
+    data-line="Still in production. The knight is not friendly." data-mood="serious">
+    <div class="panel panel--strip">
+      <div class="dossier">
+        <h2 class="dossier__title"><span lang="ja" class="jp">暁を斬れ</span></h2>
+        <p class="dossier__lede">Akatsuki wo kire, "cut the dawn". The next opening: a knight, a heroine and a sky split between night and day.</p>
+        <p class="dossier__body">46 keyframes so far. The edit comes next.</p>
+      </div>
+      <ul class="strip" aria-label="Keyframes">
+        <li><img src="assets/media/akatsuki-A02-knight-on-spire.webp" alt="A knight in white armour stands on a cathedral spire above the clouds at sunrise" width="960" height="540" loading="lazy"></li>
+        <li><img src="assets/media/akatsuki-D02-slash-the-dawn.webp" alt="A blade of light slashes across the dawn sky" width="960" height="540" loading="lazy"></li>
+        <li><img src="assets/media/akatsuki-D03-crimson-moon-spire.webp" alt="A crimson moon behind a dark spire" width="960" height="540" loading="lazy"></li>
+        <li><img src="assets/media/akatsuki-E02-blades-meet.webp" alt="Two blades meet mid-air" width="960" height="540" loading="lazy"></li>
+        <li><img src="assets/media/akatsuki-F04-go-beyond.webp" alt="The heroine leaps toward the light" width="960" height="540" loading="lazy"></li>
+        <li><img src="assets/media/akatsuki-G01-final-spires.webp" alt="Spires at the end of the battle" width="960" height="540" loading="lazy"></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="leg" id="leg-3" data-leg data-sector="Sector 3" data-name="Prototypes" data-accent="#c9a2ff"
+    data-line="Last sector. Smaller signals, still worth a look." data-mood="smile">
+    <div class="panel panel--leg">
+      <p class="leg__k">Sector 3</p>
+      <p class="leg__title">Prototypes</p>
+    </div>
+  </section>
+
+  <!-- Radar -->
+  <section class="stop" id="radar" data-stop="radar" data-sector="Sector 3" data-name="Radar" data-accent="#d3a6ff" data-frame="right"
+    data-line="A bat that listens to the internet for customers. It's cuter than it sounds." data-mood="curious">
+    <div class="panel panel--split">
+      <div class="dossier">
+        <h2 class="dossier__title">Radar</h2>
+        <p class="dossier__lede">Lead finding for local businesses, with a bat who listens for people asking for what you sell.</p>
+        <p class="dossier__body">Radar watches public posts, permits and bids, scores each signal, and drafts the reply. The landing page and app prototype are built around a Rive character who reacts to what you do.</p>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="works/radar/index.html" data-launch-title="Radar"><svg class="ico"><use href="#i-play"/></svg><span>Open the site</span></button>
+          <a class="btn btn--link" href="https://github.com/LStar977/radar" target="_blank" rel="noopener"><span>GitHub</span><svg class="ico"><use href="#i-out"/></svg></a>
+        </div>
+      </div>
+      <figure class="viewport viewport--inset">
+        <video muted loop playsinline preload="none" poster="assets/media/radar-poster.webp" data-src="assets/media/radar-muse-loop.mp4" width="960" height="540"></video>
+        <figcaption>The mascot's behaviours, built in Rive</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Signals -->
+  <section class="stop" id="signals" data-stop="signals" data-sector="Sector 3" data-name="More signals" data-note="Acorn, Carl, the Governance Literacy Library and Sprout." data-accent="#8cf5b0" data-frame="top"
+    data-line="A few more transmissions from the deep end of his GitHub." data-mood="smile">
+    <div class="panel panel--grid">
+      <h2 class="dossier__title">More signals</h2>
+      <ul class="signals">
+        <li class="signal">
+          <h3>Acorn</h3>
+          <p>A token launchpad for Robinhood Chain with bonding curves, burned liquidity and creator fees you can claim on-chain.</p>
+          <p class="signal__stack">Solidity, indexer, React</p>
+        </li>
+        <li class="signal">
+          <h3>Carl</h3>
+          <p>An iOS job-hunting assistant. It reads your résumé, finds roles that fit and prepares the applications.</p>
+          <p class="signal__stack">SwiftUI, Node</p>
+          <a class="signal__link" href="https://github.com/LStar977/Carl" target="_blank" rel="noopener">GitHub<svg class="ico"><use href="#i-out"/></svg></a>
+        </li>
+        <li class="signal">
+          <h3>Governance Literacy Library</h3>
+          <p>A publisher site for six books on governance, with 3D covers and an audio player that highlights the transcript as it plays.</p>
+          <p class="signal__stack">HTML, CSS, Web Audio</p>
+        </li>
+        <li class="signal">
+          <h3>Sprout</h3>
+          <p>A plant-care app concept. Every plant gets a nickname and a mood, and the mood is the reminder.</p>
+          <p class="signal__stack">Product design</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Edge -->
+  <section class="stop stop--edge" id="edge" data-stop="edge" data-sector="Edge" data-name="End of the map" data-accent="#e8ecf6" data-frame="high"
+    data-line="That's the edge of the map, for now. Want me to fly you back?" data-mood="hello">
+    <div class="panel panel--edge">
+      <h2 class="edge__title">That's the edge of the map, for now.</h2>
+      <p class="edge__sub">New worlds are still forming. Follow them on GitHub.</p>
+      <div class="actions actions--center">
+        <a class="btn btn--primary" href="https://github.com/LStar977" target="_blank" rel="noopener"><svg class="ico"><use href="#i-github"/></svg><span>GitHub</span></a>
+        <button class="btn btn--ghost" type="button" data-fly="gate"><svg class="ico"><use href="#i-back"/></svg><span>Fly back to the gate</span></button>
+      </div>
+      <p class="edge__fine">Every work on this page runs in your browser. Nova's model uses Live2D Cubism Core under the Live2D Proprietary Software License.</p>
+    </div>
+  </section>
+</main>
+
+<!-- All projects -->
+<div class="index" id="index" role="dialog" aria-modal="true" aria-labelledby="index-title" hidden>
+  <div class="index__inner">
+    <div class="index__bar">
+      <h2 id="index-title">All projects</h2>
+      <button class="tool" type="button" data-close-index><svg class="ico"><use href="#i-x"/></svg><span>Close</span></button>
+    </div>
+    <ol class="index__list" id="index-list"></ol>
+  </div>
+</div>
+
+<!-- Theater -->
+<div class="theater" id="theater" role="dialog" aria-modal="true" aria-labelledby="theater-title" hidden>
+  <div class="theater__bar">
+    <h2 class="theater__title" id="theater-title">Now playing</h2>
+    <a class="tool" id="theater-open" href="#" target="_blank" rel="noopener"><span>New tab</span><svg class="ico"><use href="#i-out"/></svg></a>
+    <button class="tool" type="button" id="theater-close"><svg class="ico"><use href="#i-x"/></svg><span>Close</span></button>
+  </div>
+  <div class="theater__screen" id="theater-screen"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="assets/nova/vendor/live2dcubismcore.js" defer></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
