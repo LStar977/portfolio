@@ -314,6 +314,15 @@ ol, ul { padding: 0; list-style: none; }
 .strip li { width: clamp(240px, 22vw, 360px); flex: none; position: relative; }
 .strip img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; box-shadow: 0 0 0 1px rgba(232, 236, 246, .12); }
 
+/* mosaic of rendered views */
+.mosaic { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.mosaic button { display: block; width: 100%; padding: 0; border: 0; background: #07080e; cursor: pointer; position: relative; overflow: hidden; }
+.mosaic img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; transition: transform .6s var(--ease), filter .4s; filter: saturate(.92); }
+.mosaic button:hover img, .mosaic button:focus-visible img { transform: scale(1.05); filter: none; }
+.mosaic button::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(232, 236, 246, .14); pointer-events: none; transition: box-shadow .3s; }
+.mosaic button:hover::after { box-shadow: inset 0 0 0 1px var(--accent); }
+.mosaic button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
 /* signals */
 .signals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
 .signal {
@@ -364,7 +373,9 @@ ol, ul { padding: 0; list-style: none; }
   content: ""; position: absolute; inset: -12% -16% -12% -20%; z-index: -1; pointer-events: none;
   background: radial-gradient(closest-side, rgba(3, 4, 9, .82), rgba(3, 4, 9, .5) 55%, transparent);
 }
-.panel--split, .panel--mirror, .panel--cinema, .panel--moon, .panel--strip, .panel--grid, .panel--wide, .panel--nova { gap: 34px; }
+/* in the flow layout a bright world can sit right behind the copy, so the text carries its own shadow like the gate's */
+html:not(.flight) :is(.dossier__lede, .dossier__body, .specs) { text-shadow: 0 1px 12px rgba(2, 3, 8, .9), 0 0 2px rgba(2, 3, 8, .85); }
+.panel--split, .panel--mirror, .panel--cinema, .panel--moon, .panel--strip, .panel--grid, .panel--wide, .panel--nova, .panel--mosaic { gap: 34px; }
 .dossier--row { gap: 18px; }
 .dossier__head, .dossier__more { display: flex; flex-direction: column; gap: 18px; }
 .viewport--cinema { order: 2; }
@@ -394,6 +405,7 @@ ol, ul { padding: 0; list-style: none; }
   .deck { width: 92%; margin-top: 8%; }
   .tategaki { writing-mode: horizontal-tb; font-size: clamp(40px, 11vw, 64px); letter-spacing: .02em; }
   .moons { grid-template-columns: 1fr; }
+  .mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stop { padding-block: 14vh; }
   .viewport figcaption { position: static; margin-top: 10px; }
 }
@@ -466,6 +478,12 @@ html.flight .panel--strip .dossier { position: absolute; left: max(48px, 4.5vw);
 html.flight .panel--strip .strip { position: absolute; left: 0; top: 52%; overflow: visible; padding: 0; max-width: none; animation-name: none; }
 html.flight .panel--strip.is-on .strip { animation: pan 46s linear infinite, scan 1.1s var(--ease) .25s both; }
 @keyframes pan { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* mosaic: text left, rendered views lower right */
+html.flight .panel--mosaic { display: block; }
+html.flight .panel--mosaic .dossier { position: absolute; left: max(48px, 4.5vw); top: clamp(96px, calc(50% - 300px), 50%); width: min(32rem, 36vw); }
+html.flight .panel--mosaic .mosaic { position: absolute; right: 108px; bottom: 64px; width: min(46vw, 760px); }
+html.flight .panel.is-on .mosaic { animation: scan 1.1s var(--ease) both; animation-delay: .25s; }
 
 /* grid */
 html.flight .panel--grid { justify-content: center; gap: 36px; padding-right: 108px; padding-bottom: 210px; }

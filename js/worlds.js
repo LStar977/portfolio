@@ -653,12 +653,12 @@ export function dawn() {
   const R = 340;
   const limb = new THREE.Mesh(new THREE.SphereGeometry(R, 128, 64), new THREE.ShaderMaterial({
     defines: { OCTAVES: 4 },
-    uniforms: { uSun: { value: V3(0.25, 0.55, -1).normalize() } },
+    uniforms: { uSun: { value: V3(0.25, 0.55, -1).normalize() }, uFade: { value: 1 } },
     vertexShader: SPHERE_VERT,
-    fragmentShader: NOISE + /* glsl */`uniform vec3 uSun; varying vec3 vN; varying vec3 vW; varying vec3 vObj;
+    fragmentShader: NOISE + /* glsl */`uniform vec3 uSun; uniform float uFade; varying vec3 vN; varying vec3 vW; varying vec3 vObj;
       void main(){ vec3 n = normalize(vN); vec3 V = normalize(cameraPosition - vW); float rim = pow(1.0 - max(dot(n,V),0.0), 4.0);
         float h = fbm(normalize(vObj)*6.0)*0.5+0.5;
-        vec3 c = vec3(0.02, 0.018, 0.03) * (0.6 + 0.6*h) + vec3(1.8, 0.7, 0.25) * rim * (0.6 + 0.4*dot(n, uSun));
+        vec3 c = vec3(0.02, 0.018, 0.03) * (0.6 + 0.6*h) + vec3(1.8, 0.7, 0.25) * rim * (0.6 + 0.4*dot(n, uSun)) * uFade;
         gl_FragColor = vec4(c, 1.0); }`,
   }));
   limb.position.set(0, -R - 38, -60);
@@ -667,18 +667,25 @@ export function dawn() {
   const sun = glowSprite(260, '#ffb56a', { power: 3.0, intensity: 1.6, rays: 1.0 }); sun.position.set(40, -22, -220); group.add(sun);
   const core = glowSprite(40, '#fff1d6', { power: 1.6, intensity: 3.0 }); core.position.copy(sun.position); group.add(core);
   const blade = new THREE.Mesh(new THREE.PlaneGeometry(520, 3.2), new THREE.ShaderMaterial({
-    uniforms: { uTime: { value: 0 } },
+    uniforms: { uTime: { value: 0 }, uFade: { value: 1 } },
     vertexShader: /* glsl */`varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: /* glsl */`uniform float uTime; varying vec2 vUv; void main(){ float x = vUv.x; float f = smoothstep(0.0, 0.25, x) * smoothstep(1.0, 0.6, x) * (1.0 - abs(vUv.y-0.5)*2.0);
-      float sweep = exp(-pow((x - fract(uTime*0.12))*6.0, 2.0)); gl_FragColor = vec4(vec3(2.6, 2.2, 1.9) * f * (0.4 + 1.4*sweep), 1.0); }`,
+    fragmentShader: /* glsl */`uniform float uTime, uFade; varying vec2 vUv; void main(){ float x = vUv.x; float f = smoothstep(0.0, 0.25, x) * smoothstep(1.0, 0.6, x) * (1.0 - abs(vUv.y-0.5)*2.0);
+      float sweep = exp(-pow((x - fract(uTime*0.12))*6.0, 2.0)); gl_FragColor = vec4(vec3(2.6, 2.2, 1.9) * f * (0.4 + 1.4*sweep) * uFade, 1.0); }`,
     ...additive(),
   }));
   blade.position.set(0, 40, -40); blade.rotation.z = -0.38; group.add(blade);
   const moon = new THREE.Group(); moon.add(glowSprite(46, '#ff3048', { power: 2.0, intensity: 1.4 })); moon.add(glowSprite(14, '#ffd0d4', { power: 1.4, intensity: 2.2 }));
   moon.position.set(-150, 120, -160); group.add(moon);
+  const glows = [[sky, 1.6], [sun, 1.6], [core, 3.0], [moon.children[0], 1.4], [moon.children[1], 2.2]];
   return {
     group, radius: 220,
-    update(t, ctx) { blade.material.uniforms.uTime.value = t; sun.material.uniforms.uTime.value = t; sun.position.y = -22 + Math.sin(t * 0.1) * 4; billboards(group, ctx.camera); blade.quaternion.copy(ctx.camera.quaternion); blade.rotateZ(-0.38); },
+    update(t, ctx) {
+      // the planet is big enough to hang at the edge of the stop before, so it only fades in on approach
+      const fade = 1 - THREE.MathUtils.smoothstep(group.position.distanceTo(ctx.camera.position), 1800, 2900);
+      for (const c of group.children) c.visible = fade > 0.002;
+      limb.material.uniforms.uFade.value = fade; blade.material.uniforms.uFade.value = fade;
+      for (const [m, k] of glows) m.material.uniforms.uIntensity.value = k * fade;
+      blade.material.uniforms.uTime.value = t; sun.material.uniforms.uTime.value = t; sun.position.y = -22 + Math.sin(t * 0.1) * 4; billboards(group, ctx.camera); blade.quaternion.copy(ctx.camera.quaternion); blade.rotateZ(-0.38); },
   };
 }
 
@@ -800,4 +807,170 @@ export function blackHole() {
   };
 }
 
-export const BUILDERS = { gate, represent, titan, distill, contrail, nova: novaStage, stardash: starDash, tsuki, countmein: candy, akatsuki: dawn, radar, signals, edge: blackHole };
+// rough up a geometry's vertices so rock reads as rock
+function roughen(geo, amount, freq = 0.12) {
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+    const n = Math.sin(x * freq + y * freq * 0.4) * 0.45 + Math.sin(z * freq * 1.3 - y * freq * 0.7) * 0.35 + (rand() - 0.5) * 0.5;
+    const k = 1 + n * amount;
+    pos.setXYZ(i, x * k, y + (rand() - 0.5) * amount * 20, z * k);
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+
+// ---------- Lantern Gorge: karst spires, a pagoda, and a river of sky lanterns ----------
+export function gorge() {
+  const group = new THREE.Group();
+  const rock = new THREE.MeshStandardMaterial({ color: 0x141b27, roughness: 0.9, metalness: 0, flatShading: true, emissive: 0x05080f });
+  const moss = new THREE.MeshStandardMaterial({ color: 0x173022, roughness: 1, flatShading: true });
+  const base = -200;
+  // x, z, radius, height
+  const spires = [[-160, -20, 50, 300], [-100, -70, 38, 235], [-35, 25, 34, 340], [25, -85, 30, 205], [80, 15, 44, 285], [140, -45, 36, 250], [190, 35, 28, 195], [-215, 45, 30, 185], [10, 95, 24, 160], [-120, 90, 22, 140]];
+  spires.forEach(([x, z, r, h]) => {
+    const m = new THREE.Mesh(roughen(new THREE.CylinderGeometry(r * 0.5, r, h, 11, 16), 0.17), rock);
+    m.position.set(x, base + h / 2, z); group.add(m);
+    const cap = new THREE.Mesh(roughen(new THREE.IcosahedronGeometry(r * 0.62, 1), 0.2), moss);
+    cap.scale.set(1, 0.42, 1); cap.position.set(x, base + h + 3, z); group.add(cap);
+  });
+  // a nine-storey pagoda on the tallest spire
+  const [px, pz, , ph] = spires[2];
+  const pagoda = new THREE.Group(); pagoda.position.set(px, base + ph + 6, pz); group.add(pagoda);
+  const lime = new THREE.MeshStandardMaterial({ color: 0xd9d3c4, roughness: 0.7 });
+  const eave = new THREE.MeshStandardMaterial({ color: 0x3b414b, roughness: 0.8 });
+  const glowMat = new THREE.MeshBasicMaterial({ color: new THREE.Color('#ffb060').multiplyScalar(1.6) });
+  for (let i = 0; i < 9; i++) {
+    const r = 7.5 - i * 0.55, y = i * 5.2;
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.86, r, 4, 8), lime); body.position.y = y + 2; pagoda.add(body);
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(r * 1.45, 2.2, 8, 1, true), eave); roof.position.y = y + 4.6; pagoda.add(roof);
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.88, r * 0.88, 0.9, 8, 1, true), glowMat); band.position.y = y + 2.2; pagoda.add(band);
+  }
+  const finial = new THREE.Mesh(new THREE.ConeGeometry(0.9, 6, 8), eave); finial.position.y = 9 * 5.2 + 3; pagoda.add(finial);
+
+  // the river
+  const river = new THREE.Mesh(new THREE.PlaneGeometry(560, 150), new THREE.ShaderMaterial({
+    defines: { OCTAVES: 3 },
+    uniforms: { uTime: { value: 0 } },
+    vertexShader: /* glsl */`varying vec2 vP; void main(){ vP = position.xy; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader: NOISE + /* glsl */`uniform float uTime; varying vec2 vP;
+      void main(){ float n = fbm(vec3(vP.x*0.02, vP.y*0.12 + uTime*0.15, uTime*0.05));
+        float glint = pow(max(0.0, n), 3.0);
+        vec3 c = vec3(0.02, 0.05, 0.08) + vec3(1.6, 0.7, 0.25) * glint * 0.7;
+        float edge = smoothstep(75.0, 40.0, abs(vP.y)) * smoothstep(280.0, 200.0, abs(vP.x));
+        gl_FragColor = vec4(c * edge, 1.0); }`,
+    ...additive(),
+  }));
+  river.rotation.x = -Math.PI / 2; river.position.y = base + 1; group.add(river);
+
+  // sky lanterns rising out of the gorge
+  const lanterns = points(2000, n => {
+    const pos = new Float32Array(n * 3), seed = new Float32Array(n);
+    for (let i = 0; i < n; i++) { pos.set([(rand() - 0.5) * 380, rand(), (rand() - 0.5) * 140], i * 3); seed[i] = rand(); }
+    return { position: [pos, 3], aSeed: [seed, 1] };
+  }, {
+    vertex: /* glsl */`uniform float uTime, uPR; attribute float aSeed; varying vec3 vColor; varying float vAlpha;
+      void main(){
+        float life = fract(position.y + uTime*(0.012 + aSeed*0.012));
+        vec3 p = vec3(position.x + sin(uTime*0.4 + aSeed*20.0)*6.0 + life*60.0, -190.0 + life*470.0, position.z + cos(uTime*0.3 + aSeed*13.0)*5.0);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_PointSize = (3.2 + aSeed*3.6) * uPR * (360.0 / -mv.z);
+        float flick = 0.82 + 0.18*sin(uTime*7.0 + aSeed*60.0);
+        vColor = (aSeed > 0.93 ? vec3(3.0, 0.6, 0.3) : vec3(3.0, 1.35, 0.45)) * flick;
+        vAlpha = smoothstep(0.0, 0.05, life) * smoothstep(1.0, 0.62, life);
+        gl_Position = projectionMatrix * mv;
+      }`,
+  });
+  group.add(lanterns);
+
+  const moon = new THREE.Group(); moon.add(glowSprite(150, '#bcd2ff', { power: 2.6, intensity: 0.7 })); moon.add(glowSprite(26, '#f4f7ff', { power: 1.2, intensity: 2.4 }));
+  moon.position.set(60, 170, -260); group.add(moon);
+  const moonlight = new THREE.DirectionalLight(0x9db8ff, 2.2); moonlight.position.set(160, 240, -320); moonlight.target = group; group.add(moonlight);
+  const twilight = glowSprite(1100, '#2a4c9a', { power: 3.2, intensity: 0.42 }); twilight.position.set(0, -40, -380); group.add(twilight);
+  const dusk = glowSprite(700, '#ff8a4a', { power: 4.5, intensity: 0.22 }); dusk.position.set(-120, -150, -360); group.add(dusk);
+  const warm = new THREE.PointLight(0xff9440, 140, 700, 1); warm.position.set(0, base + 30, 60); group.add(warm);
+  return {
+    group, radius: 230,
+    update(t, ctx) {
+      lanterns.material.uniforms.uTime.value = t; lanterns.material.uniforms.uPR.value = ctx.pr;
+      river.material.uniforms.uTime.value = t;
+      pagoda.rotation.y = Math.sin(t * 0.05) * 0.04;
+      billboards(group, ctx.camera);
+    },
+  };
+}
+
+// ---------- Golden Acropolis: a floating temple island at sunset ----------
+export function acropolis() {
+  const group = new THREE.Group();
+  const stone = new THREE.MeshStandardMaterial({ color: 0x8c6b52, roughness: 0.95, flatShading: true });
+  const terrace = new THREE.MeshStandardMaterial({ color: 0xd8c6a4, roughness: 0.8 });
+  const marble = new THREE.MeshStandardMaterial({ color: 0xf3e9d8, roughness: 0.5 });
+  const gold = new THREE.MeshStandardMaterial({ color: 0xebb85c, roughness: 0.25, metalness: 1, emissive: 0x3a2208 });
+  const green = new THREE.MeshStandardMaterial({ color: 0x24402a, roughness: 0.9, flatShading: true });
+
+  const island = new THREE.Mesh(roughen(new THREE.ConeGeometry(80, 150, 20, 10), 0.14, 0.09), stone);
+  island.rotation.x = Math.PI; island.position.y = -75; group.add(island);
+  [[80, 8, 0], [62, 9, 8], [44, 9, 17]].forEach(([r, h, y]) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 1.02, h, 48), terrace); m.position.y = y + h / 2 - 4; group.add(m); });
+
+  // a round temple: twelve columns, a gilded drum and dome
+  const top = 22;
+  const stylobate = new THREE.Mesh(new THREE.CylinderGeometry(19, 20.5, 2.4, 48), marble); stylobate.position.y = top + 1.2; group.add(stylobate);
+  for (let i = 0; i < 12; i++) {
+    const a = i / 12 * Math.PI * 2;
+    const col = new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.6, 19, 14), marble);
+    col.position.set(Math.cos(a) * 16, top + 2.4 + 9.5, Math.sin(a) * 16); group.add(col);
+  }
+  const drum = new THREE.Mesh(new THREE.CylinderGeometry(18, 18, 3, 48, 1, true), gold); drum.position.y = top + 23.4; group.add(drum);
+  const blue = new THREE.MeshStandardMaterial({ color: 0x1d3270, roughness: 0.32, metalness: 0.35, emissive: 0x050a1c });
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(17.5, 40, 16, 0, Math.PI * 2, 0, Math.PI / 2), blue); dome.position.y = top + 24.9; group.add(dome);
+  for (let i = 0; i < 12; i++) { // gilded ribs over the blue dome, as in the render
+    const rib = new THREE.Mesh(new THREE.TorusGeometry(17.7, 0.32, 6, 28, Math.PI / 2), gold);
+    rib.position.y = top + 24.9; rib.rotation.y = i / 12 * Math.PI * 2; group.add(rib);
+  }
+  const finial = new THREE.Mesh(new THREE.SphereGeometry(1.6, 16, 10), gold); finial.position.y = top + 43; group.add(finial);
+  const inner = new THREE.PointLight(0xffc070, 60, 160, 1); inner.position.y = top + 10; group.add(inner);
+
+  // cypresses around the terraces
+  for (let i = 0; i < 16; i++) {
+    const a = i / 16 * Math.PI * 2 + 0.2, r = i % 2 ? 54 : 72, h = 16 + (i % 3) * 5;
+    const tree = new THREE.Mesh(new THREE.ConeGeometry(3.2, h, 7), green);
+    tree.position.set(Math.cos(a) * r, (r > 60 ? 4 : 13) + h / 2, Math.sin(a) * r); group.add(tree);
+  }
+
+  // the cascade spilling off the edge
+  const falls = points(1600, n => {
+    const pos = new Float32Array(n * 3), seed = new Float32Array(n);
+    for (let i = 0; i < n; i++) { pos.set([(rand() - 0.5) * 9, rand(), (rand() - 0.5) * 3], i * 3); seed[i] = rand(); }
+    return { position: [pos, 3], aSeed: [seed, 1] };
+  }, {
+    vertex: /* glsl */`uniform float uTime, uPR; attribute float aSeed; varying vec3 vColor; varying float vAlpha;
+      void main(){
+        float life = fract(position.y + uTime*(0.18 + aSeed*0.08));
+        float drop = life*life;
+        vec3 p = vec3(position.x * (1.0 + life*2.5), 6.0 - drop*260.0, 79.0 + life*14.0 + position.z * (1.0 + life*3.0));
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_PointSize = (1.2 + aSeed*1.8 + life*2.0) * uPR * (300.0 / -mv.z);
+        vColor = mix(vec3(1.9, 1.8, 1.7), vec3(1.3, 1.1, 1.2), life);
+        vAlpha = smoothstep(0.0, 0.04, life) * smoothstep(1.0, 0.5, life) * 0.75;
+        gl_Position = projectionMatrix * mv;
+      }`,
+  });
+  group.add(falls);
+
+  const sunset = glowSprite(560, '#ff8a5c', { power: 3.6, intensity: 0.45 }); sunset.position.set(-60, -10, -220); group.add(sunset);
+  const sun = new THREE.Group(); sun.add(glowSprite(110, '#ffb35c', { power: 2.4, intensity: 1.2, rays: 0.6 })); sun.add(glowSprite(22, '#fff3d8', { power: 1.4, intensity: 2.6 }));
+  sun.position.set(-140, 30, -260); group.add(sun);
+  const key = new THREE.DirectionalLight(0xffb478, 3.2); key.position.set(-220, 90, -60); key.target = group; group.add(key);
+  const fill = new THREE.DirectionalLight(0xff7aa0, 0.9); fill.position.set(200, 40, 160); fill.target = group; group.add(fill);
+  return {
+    group, radius: 140,
+    update(t, ctx) {
+      falls.material.uniforms.uTime.value = t; falls.material.uniforms.uPR.value = ctx.pr;
+      group.position.y = group.userData.baseY + Math.sin(t * 0.35) * 4;
+      billboards(group, ctx.camera);
+    },
+  };
+}
+
+export const BUILDERS = { gate, represent, titan, distill, contrail, nova: novaStage, stardash: starDash, tsuki, countmein: candy, gorge, acropolis, akatsuki: dawn, radar, signals, edge: blackHole };

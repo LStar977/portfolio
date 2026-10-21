@@ -19,7 +19,7 @@ Any static host works. For GitHub Pages:
 1. Push this folder to a repository (for example `LStar977/portfolio`).
 2. In the repository's Settings, open Pages and set the source to the `main` branch, root folder.
 
-The largest files are the two anime openings in `works/` (about 50 MB each, every file under 8 MB), so the repository is about 130 MB in total.
+The largest files are the two anime openings in `works/` (about 50 MB each, every file under 8 MB) and the Lantern Gorge film in `assets/media/` (35 MB), so the repository is about 160 MB in total.
 
 ## How it's organised
 
@@ -34,9 +34,9 @@ The largest files are the two anime openings in `works/` (about 50 MB each, ever
 | `js/nova.js` | Loads Nova's rig, types her lines, follows the pointer and moves her between the comm window and the stage. |
 | `js/audio.js` | Sound, synthesized live. Off until a visitor turns it on. |
 | `js/theater.js` | Opens a work (a page or a video) over the cockpit. |
-| `assets/media/` | Preview loops, posters and screenshots. |
+| `assets/media/` | Preview loops, posters, screenshots and the Lantern Gorge film. |
 | `assets/nova/` | Nova's model, the v5 motion rig, the Live2D Cubism Core runtime and its licences, and Nova Studio (`viewer/`). |
-| `works/` | The playable pieces: both anime openings, Count Me In, The Record in Light, Represent Reimagined, the TITAN preview and Radar. |
+| `works/` | The playable pieces: both anime openings, Count Me In, The Record in Light, Represent Reimagined, the TITAN preview, Radar and the Golden Acropolis tour. |
 
 ## Changing things
 

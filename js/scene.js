@@ -24,10 +24,12 @@ export const ROUTE = [
   { id: 'stardash', pos: [-420, -60, -29400], dist: 300, sector: 2 },
   { id: 'tsuki', pos: [320, 140, -31800], dist: 290, sector: 2 },
   { id: 'countmein', pos: [-520, -80, -34200], dist: 196, sector: 2 },
-  { id: 'akatsuki', pos: [200, 60, -36600], dist: 250, sector: 2 },
-  { id: 'radar', pos: [-300, -100, -47400], dist: 330, sector: 3 },
-  { id: 'signals', pos: [320, 80, -49800], dist: 360, sector: 3 },
-  { id: 'edge', pos: [0, 0, -52400], dist: 470, sector: 4 },
+  { id: 'gorge', pos: [380, 30, -36600], dist: 640, sector: 2 },
+  { id: 'acropolis', pos: [-400, 110, -39000], dist: 390, sector: 2 },
+  { id: 'akatsuki', pos: [900, -250, -41400], dist: 250, sector: 2 },
+  { id: 'radar', pos: [-300, -100, -52200], dist: 330, sector: 3 },
+  { id: 'signals', pos: [320, 80, -54600], dist: 360, sector: 3 },
+  { id: 'edge', pos: [0, 0, -57200], dist: 470, sector: 4 },
 ];
 
 const SECTOR_SKY = [
@@ -54,6 +56,7 @@ export function createSpace(canvas, { quality, reduced }) {
   const worlds = ROUTE.map((r, i) => {
     const w = BUILDERS[r.id]();
     w.group.position.set(...r.pos);
+    w.group.userData.baseY = r.pos[1];
     w.id = r.id; w.route = r; w.index = i;
     scene.add(w.group);
     return w;
@@ -96,7 +99,7 @@ export function createSpace(canvas, { quality, reduced }) {
         const w = ROUTE[i % ROUTE.length], r = 300 + Math.pow(rand(), 0.6) * 2600, th = rand() * Math.PI * 2, ph = Math.acos(2 * rand() - 1);
         p = V3(w.pos[0] + r * Math.sin(ph) * Math.cos(th), w.pos[1] + r * Math.cos(ph) * 0.7, w.pos[2] + r * Math.sin(ph) * Math.sin(th));
       } else {                               // sparse field along the whole route
-        const z = 2400 - rand() * 57000, a = rand() * Math.PI * 2, r = 400 + Math.pow(rand(), 0.5) * 3600;
+        const z = 2400 - rand() * 62000, a = rand() * Math.PI * 2, r = 400 + Math.pow(rand(), 0.5) * 3600;
         p = V3(Math.cos(a) * r, Math.sin(a) * r * 0.75, z);
       }
       pos.set([p.x, p.y, p.z], i * 3);

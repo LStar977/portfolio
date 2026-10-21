@@ -227,11 +227,11 @@
     </div>
   </section>
 
-  <section class="leg" id="leg-2" data-leg data-sector="Sector 2" data-name="Films and characters" data-accent="#ff7ab8"
+  <section class="leg" id="leg-2" data-leg data-sector="Sector 2" data-name="Films and worlds" data-accent="#ff7ab8"
     data-line="Next sector is the creative one. Turn your sound on if you can." data-mood="smile">
     <div class="panel panel--leg">
       <p class="leg__k">Sector 2</p>
-      <p class="leg__title">Films and characters</p>
+      <p class="leg__title">Films and worlds</p>
     </div>
   </section>
 
@@ -332,6 +332,58 @@
         <video muted loop playsinline preload="none" poster="assets/media/count-me-in-poster.webp" data-src="assets/media/count-me-in-loop.mp4" width="960" height="540"></video>
         <figcaption>The million-voice chorus, 0:46</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <!-- Lantern Gorge -->
+  <section class="stop" id="lantern-gorge" data-stop="gorge" data-sector="Sector 2" data-name="Lantern Gorge" data-accent="#8ab8ff" data-frame="right"
+    data-line="Every rock, roof and lantern down there is code. Wait for the lanterns to come on." data-mood="curious">
+    <div class="panel panel--split">
+      <div class="dossier">
+        <h2 class="dossier__title">Lantern Gorge</h2>
+        <p class="dossier__lede">A lantern-lit river town in a karst gorge, built entirely in code and rendered as a one-minute 4K film.</p>
+        <p class="dossier__body">I set the look with AI image references, then rebuilt the place in about 20,000 lines of three.js: cliffs, stilt houses, a covered bridge, a waterfall and a nine-storey pagoda, with no downloaded models or textures. The score is composed in code too.</p>
+        <dl class="specs">
+          <div><dt>Engine</dt><dd>three.js, rendered offline</dd></div>
+          <div><dt>Film</dt><dd>62 seconds, 3840 × 2160</dd></div>
+          <div><dt>Score</dt><dd>Composed in code</dd></div>
+        </dl>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="assets/media/lantern-gorge.mp4" data-launch-type="video" data-launch-title="Lantern Gorge"><svg class="ico"><use href="#i-play"/></svg><span>Watch the film</span></button>
+        </div>
+      </div>
+      <figure class="viewport viewport--inset">
+        <video muted loop playsinline preload="none" poster="assets/media/lantern-gorge-poster.webp" data-src="assets/media/lantern-gorge-loop.mp4" width="960" height="540"></video>
+        <figcaption>The lanterns light up, 0:14</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Golden Acropolis -->
+  <section class="stop" id="golden-acropolis" data-stop="acropolis" data-sector="Sector 2" data-name="Golden Acropolis" data-accent="#ffb487" data-frame="high-right"
+    data-line="Blender this time, not code. Here it's sunset all day." data-mood="smile">
+    <div class="panel panel--mosaic">
+      <div class="dossier">
+        <h2 class="dossier__title">Golden Acropolis</h2>
+        <p class="dossier__lede">A sunset acropolis on terraced cliffs above the sea, modelled and lit in Blender.</p>
+        <p class="dossier__body">Temples, a gilded Athena, a blue-domed round temple, balustrades grown with geometry nodes, cypress and olive groves, and a nymphaeum of fountains. Six tour cameras walk through it, rendered in Cycles.</p>
+        <dl class="specs">
+          <div><dt>Tool</dt><dd>Blender 5.2, Cycles</dd></div>
+          <div><dt>Scene</dt><dd>About 2 million triangles</dd></div>
+          <div><dt>Tour</dt><dd>Six camera views</dd></div>
+        </dl>
+        <div class="actions">
+          <button class="btn btn--primary" type="button" data-launch="works/golden-acropolis/index.html" data-launch-title="Golden Acropolis"><svg class="ico"><use href="#i-play"/></svg><span>Take the tour</span></button>
+        </div>
+      </div>
+      <ul class="mosaic" aria-label="Tour views">
+        <li><button type="button" data-launch="works/golden-acropolis/index.html#1" data-launch-title="Golden Acropolis" aria-label="Open the tour at Hero view"><img src="assets/media/acropolis-01.webp" alt="A marble terrace with a sun medallion, a blue-domed round temple and the sea at sunset" width="640" height="360" loading="lazy"></button></li>
+        <li><button type="button" data-launch="works/golden-acropolis/index.html#2" data-launch-title="Golden Acropolis" aria-label="Open the tour at Temple and Athena"><img src="assets/media/acropolis-02.webp" alt="The temple and a gilded statue of Athena with her shield" width="640" height="360" loading="lazy"></button></li>
+        <li><button type="button" data-launch="works/golden-acropolis/index.html#3" data-launch-title="Golden Acropolis" aria-label="Open the tour at Sunset sea and headland"><img src="assets/media/acropolis-03.webp" alt="A balustrade with braziers above the sea, a round temple on the cliff and a temple on the far headland" width="640" height="360" loading="lazy"></button></li>
+        <li><button type="button" data-launch="works/golden-acropolis/index.html#4" data-launch-title="Golden Acropolis" aria-label="Open the tour at Cascade from above"><img src="assets/media/acropolis-04.webp" alt="Looking down on the terraces, the round temple, the pool and rows of cypresses" width="640" height="360" loading="lazy"></button></li>
+        <li><button type="button" data-launch="works/golden-acropolis/index.html#5" data-launch-title="Golden Acropolis" aria-label="Open the tour at Medallion and brazier"><img src="assets/media/acropolis-05.webp" alt="The sun medallion in the floor and a bronze brazier against the setting sun" width="640" height="360" loading="lazy"></button></li>
+        <li><button type="button" data-launch="works/golden-acropolis/index.html#6" data-launch-title="Golden Acropolis" aria-label="Open the tour at Nymphaeum waterfalls"><img src="assets/media/acropolis-06.webp" alt="Three arched fountains pouring into the nymphaeum pool" width="640" height="360" loading="lazy"></button></li>
+      </ul>
     </div>
   </section>
 
